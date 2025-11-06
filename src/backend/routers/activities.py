@@ -50,8 +50,6 @@ def create_announcement(data: Dict[str, Any], user: str = Depends(get_current_us
     ann["id"] = str(result.inserted_id)
     return ann
 
-from bson import ObjectId
-
 @router.put("/announcements/{announcement_id}", response_model=Dict[str, Any])
 def update_announcement(announcement_id: str, data: Dict[str, Any], user: str = Depends(get_current_user)):
     result = announcements_collection.update_one({"_id": ObjectId(announcement_id)}, {"$set": update_fields})
