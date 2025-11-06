@@ -24,6 +24,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   const closeLoginModal = document.querySelector(".close-login-modal");
   const loginMessage = document.getElementById("login-message");
+    // Announcement management elements
+    const manageAnnouncementsBtn = document.getElementById("manage-announcements-btn");
+    const announcementDialog = document.getElementById("announcement-dialog");
+    const closeAnnouncementModal = document.querySelector(".close-announcement-modal");
+    const announcementList = document.getElementById("announcement-list");
+    const announcementForm = document.getElementById("announcement-form");
+    const announcementFormMessage = document.getElementById("announcement-form-message");
 
   // Activity categories with corresponding colors
   const activityTypes = {

@@ -10,6 +10,7 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['mergington_high']
 activities_collection = db['activities']
 teachers_collection = db['teachers']
+announcements_collection = db['announcements']
 
 # Methods
 
@@ -50,8 +51,20 @@ def init_database():
             teachers_collection.insert_one(
                 {"_id": teacher["username"], **teacher})
 
+    # Initialize announcements if empty
+    if announcements_collection.count_documents({}) == 0:
+        for announcement in initial_announcements:
+            announcements_collection.insert_one(announcement)
+
 
 # Initial database if empty
+initial_announcements = [
+    {
+        "message": "Vítejte na Mergington High! Školní rozvrh najdete v sekci Aktivity.",
+        "start_date": None,
+        "expiration_date": "2025-12-31"
+    }
+]
 initial_activities = {
     "Chess Club": {
         "description": "Learn strategies and compete in chess tournaments",

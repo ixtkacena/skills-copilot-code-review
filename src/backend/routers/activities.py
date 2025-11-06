@@ -6,7 +6,79 @@ from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from typing import Dict, Any, Optional, List
 
-from ..database import activities_collection, teachers_collection
+from ..database import activities_collection, teachers_collection, announcements_collection
+from fastapi import Depends
+from bson import ObjectId
+from ..auth import oauth2_scheme  # Import from shared authentication module
+
+from jose import JWTError, jwt
+
+SECRET_KEY = "your-secret-key"  # Load from environment variable or config file in production
+ALGORITHM = "HS256"
+
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        if username is None:
+            raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+        return username
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid authentication credentials")
+# --- ANNOUNCEMENTS CRUD ---
+@router.get("/announcements", response_model=List[Dict[str, Any]])
+def get_announcements():
+    """Get all announcements (active and expired)"""
+    announcements = []
+    for ann in announcements_collection.find():
+        ann["id"] = str(ann.get("_id", ""))
+        ann.pop("_id", None)
+        announcements.append(ann)
+    return announcements
+
+@router.post("/announcements", response_model=Dict[str, Any])
+def create_announcement(data: Dict[str, Any], user: str = Depends(get_current_user)):
+    """Create a new announcement (signed in only)"""
+    if not data.get("message") or not data.get("expiration_date"):
+        raise HTTPException(status_code=400, detail="Message and expiration_date required")
+    ann = {
+        "message": data["message"],
+        "start_date": data.get("start_date"),
+        "expiration_date": data["expiration_date"]
+    }
+    result = announcements_collection.insert_one(ann)
+    ann["id"] = str(result.inserted_id)
+    return ann
+
+from bson import ObjectId
+
+@router.put("/announcements/{announcement_id}", response_model=Dict[str, Any])
+def update_announcement(announcement_id: str, data: Dict[str, Any], user: str = Depends(get_current_user)):
+    result = announcements_collection.update_one({"_id": ObjectId(announcement_id)}, {"$set": update_fields})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    ann = announcements_collection.find_one({"_id": ObjectId(announcement_id)})
+    ann["id"] = str(ann.get("_id", ""))
+    ann.pop("_id", None)
+    return ann
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    ann = announcements_collection.find_one({"_id": obj_id})
+    ann["id"] = str(ann.get("_id", ""))
+    result = announcements_collection.delete_one({"_id": ObjectId(announcement_id)})
+    if result.deleted_count == 0:
+@router.delete("/announcements/{announcement_id}")
+def delete_announcement(announcement_id: str, user: str = Depends(get_current_user)):
+    """Delete an announcement (signed in only)"""
+    try:
+        obj_id = ObjectId(announcement_id)
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid announcement ID format")
+    result = announcements_collection.delete_one({"_id": obj_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Announcement not found")
+    return {"message": "Announcement deleted"}
+    return {"message": "Announcement deleted"}
 
 router = APIRouter(
     prefix="/activities",

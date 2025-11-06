@@ -26,7 +26,29 @@
           <span id="display-name"></span>
           <button id="logout-button">Logout</button>
         </div>
+          <button id="manage-announcements-btn" class="icon-button hidden">
+            <span class="user-icon">📢</span>
+            <span>Announcements</span>
+          </button>
       </div>
+  <!-- Announcement Management Dialog -->
+  <div id="announcement-dialog" class="modal hidden">
+    <div class="modal-content">
+      <span class="close-announcement-modal">&times;</span>
+      <h2>Manage Announcements</h2>
+      <div id="announcement-list"></div>
+      <form id="announcement-form">
+        <label for="announcement-message">Message:</label>
+        <input type="text" id="announcement-message" name="message" required />
+        <label for="announcement-start-date">Start date (optional):</label>
+        <input type="date" id="announcement-start-date" name="start_date" />
+        <label for="announcement-expiration-date">Expiration date:</label>
+        <input type="date" id="announcement-expiration-date" name="expiration_date" required />
+        <button type="submit" id="save-announcement-btn">Save</button>
+      </form>
+      <div id="announcement-form-message"></div>
+    </div>
+  </div>
     </div>
   </header>
 
