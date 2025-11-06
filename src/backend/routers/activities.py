@@ -16,7 +16,10 @@ from jose import JWTError, jwt
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 if not SECRET_KEY:
-    raise ValueError("SECRET_KEY environment variable must be set")
+    raise RuntimeError(
+        "SECRET_KEY environment variable must be set. "
+        "Please set it before starting the application (e.g., export SECRET_KEY='your-secret-key')"
+    )
 ALGORITHM = "HS256"
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
