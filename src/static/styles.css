@@ -58,10 +58,103 @@ header {
   color: var(--primary-text);
   border-radius: 5px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.icon-button {
+  background: var(--secondary);
+  color: var(--secondary-text);
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+.icon-button:hover {
+  background: var(--secondary-dark);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal.hidden {
+  display: none;
+}
+.modal-content {
+  background: var(--surface);
+  padding: 32px 24px 24px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  min-width: 340px;
+  max-width: 420px;
   position: relative;
+}
+.close-announcement-modal {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.5rem;
+  color: var(--error);
+  cursor: pointer;
+}
+#announcement-list {
+  margin-bottom: 18px;
+}
+.announcement-item {
+  background: var(--info-light);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 4px;
+}
+.announcement-item button {
+  margin-right: 8px;
+  background: var(--primary-light);
+  color: var(--primary-text);
+  border: none;
+  border-radius: 3px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.announcement-item button:hover {
+  background: var(--primary-dark);
+}
+#announcement-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+#announcement-form label {
+  font-weight: 500;
+}
+#announcement-form input {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+#announcement-form-message {
+  color: var(--success);
+  font-size: 0.95rem;
+  margin-top: 4px;
+}
 }
 
 header h1 {
