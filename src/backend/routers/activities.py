@@ -5,6 +5,7 @@ Endpoints for the High School Management System API
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import RedirectResponse
 from typing import Dict, Any, Optional, List
+import os
 
 from ..database import activities_collection, teachers_collection, announcements_collection
 from fastapi import Depends
@@ -13,7 +14,9 @@ from ..auth import oauth2_scheme  # Import from shared authentication module
 
 from jose import JWTError, jwt
 
-SECRET_KEY = "your-secret-key"  # Load from environment variable or config file in production
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable must be set")
 ALGORITHM = "HS256"
 
 def get_current_user(token: str = Depends(oauth2_scheme)):
